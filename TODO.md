@@ -8,7 +8,8 @@ Two purposes (is probably two scripts):
 
 HR side:
     Pulls down all repos, removes readme files and scrubs all commits/branches
-    all previous commits of references to the file.
+    all previous commits of references to the file. Does a force push at the end.
+    Backs up remote repos, too.
 
 Student side:
     Pulls down all repos, does some magic on them, and pushes repos up to

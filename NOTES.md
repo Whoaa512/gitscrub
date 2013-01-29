@@ -4,6 +4,8 @@ NOTES
 Just some basic notes here on command-line Ruby scripting. I'm sure that not all
 of this will end up useful.
 
+* Note that require_relative will not work in irb/pry
+
 * Some repos have renamed README files. E.g. rails-intro's readme was initially
   named README.md, but was renamed to README.rdoc
 
