@@ -3,6 +3,14 @@ require 'curb'
 require 'json'
 require_relative 'lib/secrets.rb'
 
+#High-level goals:
+# Back up all remote repos (prob best as a separate script)
+# Clone down all GH repos
+# Scrub repos
+# Delete remote repos
+# Recreate remote repos
+# Push master and all branches
+
 
 GH_BASE_URL = 'https://api.github.com'
 def github_get_url_resource(url)
@@ -43,16 +51,6 @@ end
 def back_up_remote_repos
   fetch_all_repo_urls
   # Clone each of them down to a backup dir
-end
-
-
-
-
-
-# Remotely create a github repository.
-# http://developer.github.com/v3/repos/#create
-def create_remote_repo
-
 end
 
 # Push a modified fork of an arbitrary repository to a user's github profile.
