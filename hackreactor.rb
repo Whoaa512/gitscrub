@@ -1,23 +1,28 @@
 #!/usr/bin/env ruby
 require 'curb'
 require 'json'
-require_relative 'lib/secrets.rb'
+require "./password_module.rb"
 
 #High-level goals:
 # Back up all remote repos (prob best as a separate script)
+# Move READMEs (maybe wiki or elsewhere?)
 # Clone down all GH repos
 # Scrub repos
 # Delete remote repos
 # Recreate remote repos
 # Push master and all branches
 
+def ask_for_username
+  puts "Please enter your github username."
+  gets.chomp
+end
 
 GH_BASE_URL = 'https://api.github.com'
 def github_get_url_resource(url)
   c = Curl::Easy.new("#{GH_BASE_URL}" + url)
   c.http_auth_types = :basic
-  c.username = GH_ORG_USERNAME
-  c.password = GH_ORG_PW
+  c.username = ask_for_username
+  c.password = ask_for_password
   c.perform
   c.body_str
 end
@@ -51,6 +56,7 @@ end
 def back_up_remote_repos
   fetch_all_repo_urls
   # Clone each of them down to a backup dir
+  # Clone down each branch
 end
 
 # Push a modified fork of an arbitrary repository to a user's github profile.
