@@ -17,12 +17,16 @@ def ask_for_username
   gets.chomp
 end
 
+GH_USERNAME = ask_for_username
+GH_PASSWORD = ask_for_password
+
+
 GH_BASE_URL = 'https://api.github.com'
 def github_get_url_resource(url)
   c = Curl::Easy.new("#{GH_BASE_URL}" + url)
   c.http_auth_types = :basic
-  c.username = ask_for_username
-  c.password = ask_for_password
+  c.username = GH_USERNAME or ask_for_username
+  c.password = GH_PASSWORD or ask_for_password
   c.perform
   c.body_str
 end
@@ -42,22 +46,22 @@ def fetch_all_repo_urls
   returnobj
 end
 
-def init
-  dir = Dir.mktmpdir('hackreactor-gitdir-', '/var/tmp')
-  begin
-    Dir.chdir dir
-    ## do work
-  ensure
-    # Clean up the directory when we're done
-    FileUtils.remove_entry_secure dir
+# Backup all repos from catalystclass org
+def back_up_remote_repos folder_prefix=DateTime.now
+  backupdir = File.join(Dir.home, "#{folder_prefix}_git_backup")
+  # make backup dir
+  Dir.mkdir backupdir
+  # cd into it
+  Dir.chdir backupdir
+
+  # clone down each repo into backupdir
+  fetch_all_repo_urls.each do |repo|
+    clone_cmd = "git clone #{repo}"
+    puts "Now cloning '#{repo}'."
+    %x(#{clone_cmd})
   end
 end
 
-def back_up_remote_repos
-  fetch_all_repo_urls
-  # Clone each of them down to a backup dir
-  # Clone down each branch
-end
 
 # Push a modified fork of an arbitrary repository to a user's github profile.
 # http://developer.github.com/v3/repos/#list-all-repositories
