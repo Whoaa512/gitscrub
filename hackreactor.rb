@@ -62,6 +62,21 @@ def back_up_remote_repos folder_prefix=DateTime.now
   end
 end
 
+def checkout_locally
+  # checkout each branch locally
+  Dir.chdir backupdir
+  fetch_all_repo_names.each do |name|
+    # cd into repo directory
+    Dir.chdir name
+    puts "Grabing remote branches for '#{name}'."
+    # checkout & track each branch locally
+    %x(for branch in `git branch -a | grep remotes | grep -v HEAD | grep -v master`; do
+        git branch --track ${branch##*/} $branch
+      done)
+    # cd up to backupdir
+    Dir.chdir '..'
+  end
+end
 
 # Push a modified fork of an arbitrary repository to a user's github profile.
 # http://developer.github.com/v3/repos/#list-all-repositories
